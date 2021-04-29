@@ -1,0 +1,2 @@
+com/milo/hotfixdemo/ui/MainActivity.class
+com/milo/hotfixdemo/ui/DemoApplication.class

@@ -1,0 +1,1 @@
+dx --dex --output=Hello.dex Hello.class 
