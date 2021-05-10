@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**
- * Title：
+ * Title：反射工具
  * Describe：
  * Remark：
  * <p>
@@ -31,6 +31,7 @@ class ReflectUtils {
         return getField(baseDexClassLoader, Class.forName("dalvik.system.BaseDexClassLoader"), "pathList");
     }
 
+    //获取dex元素
     public static Object getDelElements(Object paramObject) throws Exception{
         return  getField(paramObject, paramObject.getClass(), "dexElements");
     }

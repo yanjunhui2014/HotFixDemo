@@ -28,6 +28,11 @@ public class FileDexUtils {
         loadDex.clear();
     }
 
+    /**
+     *  加载修复包的dex文件
+     *
+     * @param context
+     */
     public static void loadFixedDex(Context context) {
         Log.d(tag, "loadFixedDex");
         File fileDir = context.getDir(Constants.DEX_DIR, Context.MODE_PRIVATE);
@@ -37,6 +42,7 @@ public class FileDexUtils {
         }
         for (File file : files) {
             if (file.getAbsolutePath().endsWith(".dex") && !"classes.dex".equalsIgnoreCase(file.getAbsolutePath())) {
+                //将需要热修的dex文件汇集到一起
                 loadDex.add(file);
             }
         }
@@ -54,8 +60,10 @@ public class FileDexUtils {
         for (File file : loadDex) {
             Log.d(tag, "createDexClassLoader, file == " + file.getAbsolutePath());
 
+            //创建类加载起
             DexClassLoader dexClassLoader = new DexClassLoader(file.getAbsolutePath(), optimDir,
                     null, context.getClassLoader());
+            //开始修复
             hotFix(context, dexClassLoader);
         }
     }
@@ -65,14 +73,19 @@ public class FileDexUtils {
         PathClassLoader pathClassLoader = (PathClassLoader) context.getClassLoader();
 
         try {
+            //获取修复包里的dexElements
             Object myElements = ReflectUtils.getDelElements(ReflectUtils.getPathList(classLoader));
 
+            //获取原包里的dexElements
             Object sysElements = ReflectUtils.getDelElements(ReflectUtils.getPathList(pathClassLoader));
 
+            //得到合并后的dexElements
             Object combineElements = ArrayUtils.combine(myElements, sysElements);
 
+            //得到原包里的 pathList
             Object sysPathList = ReflectUtils.getPathList(pathClassLoader);
 
+            //利用反射，将合并后的dexElements 赋值到原包 pathList中
             ReflectUtils.setField(sysPathList, sysPathList.getClass(), combineElements);
         } catch (Exception e) {
             e.printStackTrace();
