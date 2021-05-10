@@ -50,6 +50,7 @@ class CFixProcessor {
         return false
     }
 
+    //对.class文件进行字节处理（插入参数为Hack的构造方法）
     private static void referHackWhenInit(File classFile, File hashFile, Map hashMap,
                                           File patchDir) {
         File optClass = new File(classFile.parent, classFile.name + ".opt")

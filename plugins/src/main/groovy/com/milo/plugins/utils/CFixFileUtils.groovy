@@ -8,8 +8,7 @@ import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.zip.ZipEntry
 
-class CFixFileUtils {
-
+class CFixFileUtils{
     static File touchFile(File dir, String path) {
         File file = new File("${dir}/${path}")
         file.getParentFile().mkdirs()

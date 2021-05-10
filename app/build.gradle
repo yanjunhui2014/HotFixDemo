@@ -1,10 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.milo.plugins'
 
-cfix{
+cfix {
+    includePackage = ['me/wcy/cfix/sample']
+    excludeClass = ['me/wcy/cfix/sample/Exclude']
     debugOn = true
-    keyAlias = "abcd"
-    keyPassword = "123456"
+
+    sign = true
+    storeFile = file("release.jks")
+    storePassword = 'android'
+    keyAlias = 'cfix'
+    keyPassword = 'android'
 }
 
 android {
@@ -24,13 +30,28 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+        release {
+            storeFile file("release.jks")
+            storePassword 'android'
+            keyAlias 'cfix'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
         debug {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

@@ -36,5 +36,4 @@ class CFixMapUtils {
     static format(String name, String hash) {
         return name + MAP_SEPARATOR + hash + "\n"
     }
-
 }

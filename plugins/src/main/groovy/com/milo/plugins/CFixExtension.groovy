@@ -2,7 +2,7 @@ package com.milo.plugins
 
 import org.gradle.api.Project
 
-class CFixExtension{
+class CFixExtension {
     HashSet<String> includePackage = []
     HashSet<String> excludeClass = []
     boolean debugOn = true

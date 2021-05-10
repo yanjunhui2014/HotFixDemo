@@ -11,6 +11,7 @@ import org.gradle.api.InvalidUserDataException
 import org.gradle.api.Project
 
 class CFixAndroidUtils {
+
     private static final String PATCH_NAME = "patch.jar"
 
     static String getApplication(Set<File> manifestFiles) {
@@ -133,4 +134,5 @@ class CFixAndroidUtils {
             throw new GradleException('> cfix: sign failed')
         }
     }
+
 }
