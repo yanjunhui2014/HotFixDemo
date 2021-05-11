@@ -40,6 +40,7 @@ public class FileDexUtils {
         if (files == null || files.length == 0) {
             return;
         }
+        //如果是patch.jar添加解压过程
         for (File file : files) {
             if (file.getAbsolutePath().endsWith(".dex") && !"classes.dex".equalsIgnoreCase(file.getAbsolutePath())) {
                 //将需要热修的dex文件汇集到一起
