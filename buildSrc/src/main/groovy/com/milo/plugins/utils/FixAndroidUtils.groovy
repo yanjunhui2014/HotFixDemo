@@ -2,7 +2,7 @@ package com.milo.plugins.utils
 
 import com.android.build.gradle.internal.pipeline.TransformTask
 import com.android.build.gradle.internal.transforms.ProGuardTransform
-import com.milo.plugins.CFixExtension
+import com.milo.plugins.HotFixExtension
 import groovy.xml.Namespace
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.apache.tools.ant.util.JavaEnvUtils
@@ -81,7 +81,7 @@ class FixAndroidUtils {
         }
     }
 
-    static signPatch(String patchPath, CFixExtension extension) {
+    static signPatch(String patchPath, HotFixExtension extension) {
         File patchFile = new File(patchPath)
         if (!patchFile.exists() || !extension.sign) {
             return

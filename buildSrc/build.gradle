@@ -31,4 +31,6 @@ dependencies {
 
     implementation 'org.ow2.asm:asm-all:5.0.3'
     implementation 'com.android.tools.build:gradle:3.1.4'
+    implementation 'commons-io:commons-io:2.4'
+    implementation 'commons-codec:commons-codec:1.11'
 }

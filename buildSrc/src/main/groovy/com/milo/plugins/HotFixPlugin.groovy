@@ -1,6 +1,8 @@
 package com.milo.plugins
 
+import com.milo.plugins.utils.FixFileUtils
 import com.milo.plugins.utils.FixLogger
+import com.milo.plugins.utils.FixProcessor
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -17,12 +19,18 @@ class HotFixPlugin implements Plugin<Project> {
 
     private static final String DEBUG = "debug"
 
+    private HotFixExtension hotFixExtension
+
     @Override
     void apply(Project project) {
         startTime = System.currentTimeMillis()
         FixLogger.i("HotFixPlugin start")
+        project.extensions.create('hotfix', HotFixExtension, project)
 
         project.afterEvaluate {
+            hotFixExtension = project.extensions.findByName('hotfix') as HotFixExtension
+            FixLogger.init(hotFixExtension.showLog)
+
             String applicationId = project.android.defaultConfig.applicationId
             FixLogger.i("applicationId == ${applicationId}")
 
@@ -54,31 +62,20 @@ class HotFixPlugin implements Plugin<Project> {
                 }
                 hashFile.createNewFile()
 
-
-//                String cfixJarBeforeDex = "cfixJarBeforeDex${variant.name.capitalize()}"
-//                project.task(cfixJarBeforeDex) {
-//                    doLast {
-//                        Set<File> inputFiles = dexTask.inputs.files.files
-//                        inputFiles.each { file ->
-//                            CFixLogger.i("transformClassesTask input: ${file.absolutePath}")
-//                        }
-//                        Set<File> files = CFixFileUtils.getFiles(inputFiles)
-//                        files.each { file ->
-//                            if (file.name.endsWith(".jar")) {
-//                                CFixProcessor.processJar(file, hashFile, hashMap, patchDir, extension)
-//                            } else if (file.name.endsWith(".class")) {
-//                                CFixProcessor.processClass(file, hashFile, hashMap, patchDir, extension)
-//                            }
-//                        }
-//                    }
-//                }
-
+                File patchDir
+                Map hashMap = new HashMap()
 
                 Task hotfixJarBeforeDex = project.task("hotfixBeforeDex${variant.name.capitalize()}"){
                     doLast {
                         Set<File> inputFiles = dexTask.inputs.files.files
-                        inputFiles.each { file ->
-                            FixLogger.i("dexTask class ${file.getAbsolutePath()}")
+                        Set<File> files = FixFileUtils.getFiles(inputFiles)
+
+                        files.each { file ->
+                            if(file.name.endsWith(".jar")){
+                                FixProcessor.processJar(file, hashFile, hashMap, patchDir, hotFixExtension)
+                            } else if(file.name.endsWith(".class")){
+                                FixProcessor.processClass(file, hashFile, hashMap, patchDir, hotFixExtension)
+                            }
                         }
                     }
                 }

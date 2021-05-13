@@ -1,17 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.milo.plugins'
 
-//cfix {
-//    includePackage = ['me/wcy/cfix/sample']
-//    excludeClass = ['me/wcy/cfix/sample/Exclude']
-//    debugOn = true
-//
-//    sign = true
-//    storeFile = file("release.jks")
-//    storePassword = 'android'
-//    keyAlias = 'cfix'
-//    keyPassword = 'android'
-//}
+hotfix {
+    includePackage = ['com/milo/hotfixdemo']
+    excludeClass = ['me/wcy/cfix/sample/Exclude']
+    debugOn = true
+    showLog = true
+
+    sign = true
+    storeFile = file("release.jks")
+    storePassword = 'android'
+    keyAlias = 'cfix'
+    keyPassword = 'android'
+}
 
 android {
     compileSdkVersion 28
@@ -32,7 +33,10 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file("debug.keystore")
+            storeFile file("release.jks")
+            storePassword 'android'
+            keyAlias 'cfix'
+            keyPassword 'android'
         }
         release {
             storeFile file("release.jks")
@@ -72,6 +76,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'org.ow2.asm:asm-all:5.0.3'
 }
 
 

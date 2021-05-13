@@ -1,7 +1,5 @@
 package com.milo.hotfixdemo;
 
-import com.milo.libasm.AddField;
-
 import org.junit.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
@@ -25,6 +23,11 @@ public class ExampleUnitTest {
 
     @Test
     public void test() {
+        AsmTest asmTest = new AsmTest();
+        asmTest.showClassInfoByAsm(DemoApplication.class);
+    }
+
+    private void writeDescToClass(){
         String output = "/Users/junhui/android/opensource/HotFixDemo/app/build/asmTest";
         String classDir = "/Users/junhui/android/opensource/HotFixDemo/app/build/intermediates/javac/debug/classes/com/milo/hotfixdemo/ui/MainActivity.class";
 
@@ -42,13 +45,13 @@ public class ExampleUnitTest {
 
             ClassReader classReader = new ClassReader(new FileInputStream(classDir));
             ClassWriter classWriter = new ClassWriter(classReader, ClassWriter.COMPUTE_MAXS);
-            ClassVisitor addField = new AddField(classWriter,
-                    "field",
-                    Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC + Opcodes.ACC_FINAL,
-                    Type.getDescriptor(String.class),
-                    "value"
-            );
-            classReader.accept(addField, ClassReader.EXPAND_FRAMES);
+//            ClassVisitor addField = new AddField(classWriter,
+//                    "field",
+//                    Opcodes.ACC_PUBLIC + Opcodes.ACC_STATIC + Opcodes.ACC_FINAL,
+//                    Type.getDescriptor(String.class),
+//                    "value"
+//            );
+//            classReader.accept(addField, ClassReader.EXPAND_FRAMES);
             byte[] newClass = classWriter.toByteArray();
             File newFile = new File(output, "MainActivity.class");
 
@@ -65,7 +68,6 @@ public class ExampleUnitTest {
         if(fieldAddSuc){
             System.out.println("congratulation, field add suc");
         }
-
     }
 
     private boolean createNewFileIfNeed(String filePath) {

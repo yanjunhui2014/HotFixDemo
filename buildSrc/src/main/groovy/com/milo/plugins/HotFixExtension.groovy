@@ -2,10 +2,11 @@ package com.milo.plugins
 
 import org.gradle.api.Project
 
-class CFixExtension {
+class HotFixExtension {
     HashSet<String> includePackage = []
     HashSet<String> excludeClass = []
     boolean debugOn = true
+    boolean showLog = true
 
     boolean sign = false
     File storeFile = null
@@ -13,6 +14,6 @@ class CFixExtension {
     String keyAlias = ''
     String keyPassword = ''
 
-    CFixExtension(Project project) {
+    HotFixExtension(Project project) {
     }
 }

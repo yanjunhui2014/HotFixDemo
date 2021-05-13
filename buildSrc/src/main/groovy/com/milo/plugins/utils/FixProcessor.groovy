@@ -1,16 +1,14 @@
 package com.milo.plugins.utils
 
-import com.milo.plugins.CFixExtension
-import org.apache.commons.codec.digest.DigestUtils
+import com.milo.plugins.HotFixExtension
 import org.apache.commons.io.FileUtils
+import org.apache.commons.codec.digest.DigestUtils
 import org.objectweb.asm.*
 
 class FixProcessor {
 
-    static processJar(File jarFile, File hashFile, Map hashMap, File patchDir, CFixExtension extension) {
+    static processJar(File jarFile, File hashFile, Map hashMap, File patchDir, HotFixExtension extension) {
         if (shouldProcessJar(jarFile)) {
-            FixLogger.i("process jar: ${jarFile.absolutePath}")
-
             File optDirFile = new File(jarFile.absolutePath.substring(0, jarFile.absolutePath.length() - 4))
             FixFileUtils.unZipJar(jarFile, optDirFile)
 
@@ -42,7 +40,7 @@ class FixProcessor {
         }
     }
 
-    static boolean processClass(File classFile, File hashFile, Map hashMap, File patchDir, CFixExtension extension) {
+    static boolean processClass(File classFile, File hashFile, Map hashMap, File patchDir, HotFixExtension extension) {
         if (shouldProcessClass(classFile, extension)) {
             referHackWhenInit(classFile, hashFile, hashMap, patchDir)
             return true
@@ -106,7 +104,7 @@ class FixProcessor {
         return jarPath.contains("/build/intermediates/")
     }
 
-    private static boolean shouldProcessClass(File classFile, CFixExtension extension) {
+    private static boolean shouldProcessClass(File classFile, HotFixExtension extension) {
         if (!classFile.exists() || !classFile.name.endsWith(".class")) {
             return false
         }
@@ -116,12 +114,16 @@ class FixProcessor {
         String className = cr.className
         inputStream.close()
 
-        return !className.startsWith("me/wcy/cfix/lib/") &&
+        final boolean shouldProcess = !className.startsWith("me/wcy/cfix/lib/") &&
                 !className.contains("android/support/") &&
                 !className.contains("/R\$") &&
                 !className.endsWith("/R") &&
                 !className.endsWith("/BuildConfig") &&
                 FixSetUtils.isIncluded(className, extension.includePackage) &&
                 !FixSetUtils.isExcluded(className, extension.excludeClass)
+        if(shouldProcess){
+            FixLogger.d("shouldProcess class name == ${className}")
+        }
+        return shouldProcess;
     }
 }
