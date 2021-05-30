@@ -1,4 +1,4 @@
-package com.milo.hotfixdemo.utils;
+package com.milo.hotfixdemo.hotfixtools;
 
 /**
  * Title：

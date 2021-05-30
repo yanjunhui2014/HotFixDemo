@@ -1,29 +1,68 @@
 package com.milo.hotfixdemo.ui;
 
+import androidx.annotation.IntDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.milo.hotfixdemo.R;
-import com.milo.hotfixdemo.utils.Constants;
-import com.milo.hotfixdemo.utils.FileDexUtils;
-import com.milo.hotfixdemo.utils.FileUtils;
+import com.milo.hotfixdemo.data.Sex;
+import com.milo.hotfixdemo.hotfixtools.Constants;
+import com.milo.hotfixdemo.hotfixtools.FileDexUtils;
+import com.milo.hotfixdemo.hotfixtools.FileUtils;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 
+@TargetApi(23)
 public class MainActivity extends AppCompatActivity {
+
+    public MainActivity(){}
+
+    public MainActivity(int a){
+
+    }
+
+    public MainActivity(int a, String b){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    PopupWindow window = new PopupWindow();
+                    window.setContentView(new View(MainActivity.this));
+                    window.showAsDropDown(findViewById(R.id.mBtnTest));
+
+                    WindowManager windowManager = getWindowManager();
+                    windowManager.removeViewImmediate(window.getContentView());
+
+                    window.dismiss();
+                    window.dismiss();
+                } catch (IllegalArgumentException e){
+                    e.printStackTrace();
+                }
+            }
+        }, 3000);
+
 
         if (Build.VERSION.SDK_INT >= 23) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 100);
@@ -49,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                 FileDexUtils.loadFixedDex(MainActivity.this.getApplicationContext());
             }
         });
+
+        testMethod(Sex.MAN);
     }
 
     private void downloadPatch() {
@@ -67,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
         if (FileUtils.copy(fromFile.getAbsolutePath(), toFile.getAbsolutePath())) {
             Toast.makeText(this, "补丁拷贝成功至:" + toFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void testMethod(@Sex int sex){
+        int a = sex;
     }
 
 }

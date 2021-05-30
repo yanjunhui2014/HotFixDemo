@@ -5,7 +5,7 @@ class FixSetUtils {
     static boolean isExcluded(String path, Set<String> excludeClass) {
         boolean isExcluded = false
         excludeClass.each { exclude ->
-            if (path.endsWith(exclude)) {
+            if (path.startsWith(exclude)) {
                 isExcluded = true
             }
         }

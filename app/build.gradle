@@ -3,7 +3,7 @@ apply plugin: 'com.milo.plugins'
 
 hotfix {
     includePackage = ['com/milo/hotfixdemo']
-    excludeClass = ['me/wcy/cfix/sample/Exclude']
+    excludeClass = ['me/wcy/cfix/sample/Exclude', 'com/milo/hotfixdemo/hotfixtools']
     debugOn = true
     showLog = true
 
@@ -66,6 +66,10 @@ android {
     dexOptions {
         preDexLibraries false
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -79,8 +83,6 @@ dependencies {
 
     implementation 'org.ow2.asm:asm-all:5.0.3'
 }
-
-
 
 //project.afterEvaluate {
 //    project.android.applicationVariants.each { variant ->

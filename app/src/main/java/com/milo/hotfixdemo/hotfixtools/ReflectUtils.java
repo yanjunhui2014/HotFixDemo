@@ -1,6 +1,5 @@
-package com.milo.hotfixdemo.utils;
+package com.milo.hotfixdemo.hotfixtools;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
 /**

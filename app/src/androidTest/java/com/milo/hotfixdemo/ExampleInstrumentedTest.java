@@ -1,6 +1,7 @@
 package com.milo.hotfixdemo;
 
 import android.content.Context;
+import android.widget.PopupWindow;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -20,7 +21,9 @@ public class ExampleInstrumentedTest {
     @Test
     public void useAppContext() {
         // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.milo.hotfixdemo", appContext.getPackageName());
+//        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+//        assertEquals("com.milo.hotfixdemo", appContext.getPackageName());
+
+
     }
 }

@@ -1,10 +1,9 @@
-package com.milo.hotfixdemo.utils;
+package com.milo.hotfixdemo.hotfixtools;
 
 import android.content.Context;
 import android.util.Log;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import dalvik.system.DexClassLoader;

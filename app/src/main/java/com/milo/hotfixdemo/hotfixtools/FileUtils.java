@@ -1,5 +1,6 @@
-package com.milo.hotfixdemo.utils;
+package com.milo.hotfixdemo.hotfixtools;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 import java.io.File;
@@ -83,6 +84,43 @@ public class FileUtils {
             return null;
         }
         return file;
+    }
+
+    public static String getFileName(String urlOrName) {
+        if (isEmpty(urlOrName)) {
+            return null;
+        } else {
+            String auditValue = urlOrName;
+            try {
+                final String encodedPath = Uri.parse(urlOrName).getEncodedPath();
+
+                if (encodedPath != null) {
+                    int pathIndex = urlOrName.indexOf(encodedPath);
+                    if (pathIndex + encodedPath.length() < urlOrName.length()) {
+                        String endUrl = urlOrName.substring(pathIndex + encodedPath.length());
+                        //替换调encodePath之后的"/"
+                        if (endUrl.contains("/")) {
+                            endUrl = endUrl.replaceAll("/", "&");
+                        }
+                        auditValue = encodedPath + endUrl;
+                    } else {
+                        auditValue = encodedPath;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (isEmpty(auditValue)) {
+                auditValue = urlOrName;
+            }
+            int pos = auditValue.lastIndexOf("/");
+            return pos == -1 ? auditValue : auditValue.substring(pos + 1);
+        }
+    }
+
+    private static boolean isEmpty(String str){
+        return str == null || "".equals(str);
     }
 
 }

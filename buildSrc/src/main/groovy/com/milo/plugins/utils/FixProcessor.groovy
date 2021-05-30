@@ -1,5 +1,6 @@
 package com.milo.plugins.utils
 
+import com.milo.plugins.AsmUtils
 import com.milo.plugins.HotFixExtension
 import org.apache.commons.io.FileUtils
 import org.apache.commons.codec.digest.DigestUtils
@@ -66,7 +67,8 @@ class FixProcessor {
                     @Override
                     void visitInsn(int opcode) {
                         if ("<init>".equals(name) && opcode == Opcodes.RETURN) {
-                            super.visitLdcInsn(Type.getType("Lme/wcy/cfix/Hack;"))
+                            FixLogger.d("super.visitLdcInsn ..  in ..")
+                            super.visitLdcInsn(Type.getType(Type.getDescriptor(Float.class)))
                         }
                         super.visitInsn(opcode)
                     }
@@ -82,17 +84,21 @@ class FixProcessor {
         if (classFile.exists()) {
             classFile.delete()
         }
-        optClass.renameTo(classFile)
+//        optClass.renameTo(classFile)
+
+        if(classFile){
+            AsmUtils.writeToDesktop(classFile.getAbsolutePath(), cw)
+        }
 
         // save hash
-        FileInputStream is = new FileInputStream(classFile)
-        String hash = DigestUtils.sha1Hex(is)
-        is.close()
-        hashFile.append(FixMapUtils.format(className, hash))
-
-        if (FixMapUtils.notSame(hashMap, className, hash)) {
-            FileUtils.copyFile(classFile, FixFileUtils.touchFile(patchDir, className + ".class"))
-        }
+//        FileInputStream is = new FileInputStream(classFile)
+//        String hash = DigestUtils.sha1Hex(is)
+//        is.close()
+//        hashFile.append(FixMapUtils.format(className, hash))
+//
+//        if (FixMapUtils.notSame(hashMap, className, hash)) {
+//            FileUtils.copyFile(classFile, FixFileUtils.touchFile(patchDir, className + ".class"))
+//        }
     }
 
     private static boolean shouldProcessJar(File jarFile) {
@@ -111,19 +117,22 @@ class FixProcessor {
 
         FileInputStream inputStream = new FileInputStream(classFile)
         ClassReader cr = new ClassReader(inputStream)
+
+        boolean isApplicationClass = ("android/support/multidex/MultiDexApplication".equals(cr.getSuperName()) || "android.app.Application".equals(cr.getSuperName()))
+
         String className = cr.className
         inputStream.close()
 
-        final boolean shouldProcess = !className.startsWith("me/wcy/cfix/lib/") &&
-                !className.contains("android/support/") &&
-                !className.contains("/R\$") &&
-                !className.endsWith("/R") &&
-                !className.endsWith("/BuildConfig") &&
-                FixSetUtils.isIncluded(className, extension.includePackage) &&
-                !FixSetUtils.isExcluded(className, extension.excludeClass)
-        if(shouldProcess){
-            FixLogger.d("shouldProcess class name == ${className}")
-        }
+        final boolean shouldProcess =
+                !isApplicationClass &&
+                        !className.startsWith("me/wcy/cfix/lib/") &&
+                        !className.contains("android/support/") &&
+                        !className.contains("/R\$") &&
+                        !className.endsWith("/R") &&
+                        !className.endsWith("/BuildConfig") &&
+                        FixSetUtils.isIncluded(className, extension.includePackage) &&
+                        !FixSetUtils.isExcluded(className, extension.excludeClass)
         return shouldProcess;
     }
+
 }

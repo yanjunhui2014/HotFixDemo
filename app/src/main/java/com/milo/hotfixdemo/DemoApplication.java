@@ -1,11 +1,11 @@
 package com.milo.hotfixdemo;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
-import com.milo.hotfixdemo.utils.FileDexUtils;
-import com.milo.hotfixdemo.utils.FileUtils;
+import com.milo.hotfixdemo.hotfixtools.FileDexUtils;
+
+import java.io.Serializable;
 
 /**
  * Title：
@@ -16,7 +16,7 @@ import com.milo.hotfixdemo.utils.FileUtils;
  * E-Mail : 303767416@qq.com
  * 2021/4/5
  */
-public class DemoApplication extends MultiDexApplication {
+public class DemoApplication extends MultiDexApplication implements Serializable {
 
     @Override
     public void onCreate() {
